@@ -12,11 +12,13 @@ namespace NoughtsAndCrosses.Controllers
     public class GameController : Controller
     {
         private Blank Game;
-        private GameRepository repo;
+        private IGameRepository repo;
+        private MiddleLayer ml;
 
         public GameController()
         {
-            repo = new GameRepository();
+            repo = new GameRepository(new GameContext());
+            ml = new MiddleLayer(repo);
         }
 
         public ActionResult Index()
@@ -29,95 +31,20 @@ namespace NoughtsAndCrosses.Controllers
             return View();
         }
 
-
-        private void WinHandler(string Text)
-        {
-            repo.UpdateGameResult(Convert.ToInt32(Session["GameId"]), Text);
-        }
-
-        public bool CheckForWinners(out string msg)
-        {
-            CellOwner? p = Game.Winner;
-
-            if (p == CellOwner.X)
-            {
-                msg = "Computer Wins";
-                WinHandler(msg);
-                return true;
-            }
-            else if (p == CellOwner.O)
-            {
-                msg = "You Win!";
-                WinHandler(msg);
-                return true;
-            }
-            else if (Game.IsFull)
-            {
-                msg = "Cat's Game";
-                WinHandler(msg);
-                return true;
-            }
-            msg = null;
-            return false;
-        }
-
-
         [ChildActionOnly]
-        private JsonResult MoveResult(int x, int y, string WinnerInfo)
+        private JsonResult MoveResult(MoveResultModel result)
         {
-            MoveResultModel result = new MoveResultModel();
             result.RedirectLink = Url.Action("Index", "Game");
-            result.x = x;
-            result.y = y;
-            result.WinnerInfo = WinnerInfo;
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        private void MakeMove(Blank game, CellInfo s, CellOwner owner)
-        {
-            game[s.X, s.Y] = owner;
-            repo.AddMove(Convert.ToInt32(Session["GameId"]), s, owner);
         }
 
         public ActionResult Move(int x, int y)
         {
-            // получаем текущую игру
-            Game = (Blank)Session["Game"];
-
-            // Записываем сделанный игроком шаг
-            CellInfo s = new CellInfo(x, y);
-            MakeMove(Game, s, CellOwner.O);
-
-            string txt = null;
-
-            if (CheckForWinners(out txt))
-            {
-                return MoveResult(-1, -1, txt);
-            }
-
-
-            if (Game.EmptyCells.Count == Game.Size)
-            {
-                Random r = new Random();
-                s = new CellInfo(r.Next(0, 3), r.Next(0, 3));
-            }
-            else
-            {
-                s = ChooseMoveLogic.GetBestMove(Game, CellOwner.X);
-            }
-
-            MakeMove(Game, s, CellOwner.X);
-
-            if (CheckForWinners(out txt))
-            {
-                return MoveResult(s.X, s.Y, txt);
-            }
-            else
-            {
-                return MoveResult(s.X, s.Y, txt);
-            }
+            ml.Game = (Blank)Session["Game"];
+            ml.GameId = Convert.ToInt32(Session["GameId"]);
+            MoveResultModel result = ml.Move(x, y);
+            return MoveResult(result);
         }
-
 
         public ActionResult GetGamesList(string ForSession)
         {

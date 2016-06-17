@@ -5,16 +5,19 @@ using System.Web;
 using NoughtsAndCrosses.Classes;
 using NoughtsAndCrosses.Repository;
 using System.Data.Entity;
+using NoughtsAndCrosses.Models;
 
-namespace NoughtsAndCrosses.Models
+namespace NoughtsAndCrosses.Classes
 {
-
-    public class GameRepository
+    /// <summary>
+    /// Репозитарий для работы с БД. Контект идет инъекцией
+    /// </summary>
+    public class GameRepository : NoughtsAndCrosses.Classes.IGameRepository
     {
         private GameContext _db;
-        public GameRepository()//(GameContext dbContext)
+        public GameRepository(GameContext dbContext)
         {
-            _db = new GameContext();//dbContext;
+            _db = dbContext;
         }
 
         // Сохраняем запись о начале игры при заходе на страницу/обновлении/нажатии на кнопку принудительного начала
@@ -89,6 +92,7 @@ namespace NoughtsAndCrosses.Models
             return tmp;
         }
 
+        // Получение полной статистики
         public IEnumerable<Overall> GetOverall()
         {
             return from game in _db.GameInfo
