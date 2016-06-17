@@ -5,22 +5,35 @@ using System.Web;
 using System.Web.Mvc;
 using NoughtsAndCrosses.Classes;
 using NoughtsAndCrosses.Models;
+using NoughtsAndCrosses.Repository;
 
 namespace NoughtsAndCrosses.Controllers
 {
     public class GameController : Controller
     {
         private Blank Game;
+        private GameRepository repo;
+
+        public GameController()
+        {
+            repo = new GameRepository();
+        }
 
         public ActionResult Index()
         {
+            // Объект новой игры
             Game = new Blank3x3();
             Session["Game"] = Game;
+            Session["GameId"] = repo.AddGame(Session.SessionID);
 
             return View();
         }
 
 
+        private void WinHandler(string Text)
+        {
+            repo.UpdateGameResult(Convert.ToInt32(Session["GameId"]), Text);
+        }
         public bool CheckForWinners(out string msg)
         {
             CellOwner? p = Game.Winner;
@@ -28,22 +41,26 @@ namespace NoughtsAndCrosses.Controllers
             if (p == CellOwner.X)
             {
                 msg = "Computer Wins";
+                WinHandler(msg);
                 return true;
             }
             else if (p == CellOwner.O)
             {
                 msg = "You Win!";
+                WinHandler(msg);
                 return true;
             }
             else if (Game.IsFull)
             {
                 msg = "Cat's Game";
+                WinHandler(msg);
                 return true;
             }
             msg = null;
             return false;
         }
-        
+
+
         [ChildActionOnly]
         private JsonResult MoveResult(int x, int y, string WinnerInfo)
         {
@@ -55,25 +72,30 @@ namespace NoughtsAndCrosses.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        private void MakeMove(Blank game, CellInfo s, CellOwner owner)
+        {
+            game[s.X, s.Y] = owner;
+            repo.AddMove(Convert.ToInt32(Session["GameId"]), s, owner);
+        }
+
         public ActionResult Move(int x, int y)
         {
-            // запоминаем сделанный игроком шаг
+            // получаем текущую игру
             Game = (Blank)Session["Game"];
 
+            // Записываем сделанный игроком шаг
             CellInfo s = new CellInfo(x, y);
-            Game[x, y] = CellOwner.O;
+            MakeMove(Game, s, CellOwner.O);
 
             string txt = null;
+
             if (CheckForWinners(out txt))
             {
-              /*  MoveResultModel mr = new MoveResultModel();
-                mr.RedirectLink = Url.Action("Index", "Game");
-                mr.WinnerInfo = txt;*/
-                return MoveResult(-1, -1, txt);//   Json(mr, JsonRequestBehavior.AllowGet);
+                return MoveResult(-1, -1, txt);
             }
-                //Form1_Load(null, new EventArgs());  //Winner was found, reload the game
 
-            if (Game.EmptyCells.Count == Game.Size) //if all spaces are open, randomly pick one for excitement
+
+            if (Game.EmptyCells.Count == Game.Size)
             {
                 Random r = new Random();
                 s = new CellInfo(r.Next(0, 3), r.Next(0, 3));
@@ -83,25 +105,14 @@ namespace NoughtsAndCrosses.Controllers
                 s = ChooseMoveLogic.GetBestMove(Game, CellOwner.X);
             }
 
-            Game[s.X, s.Y] = CellOwner.X;
+            MakeMove(Game, s, CellOwner.X);
 
-            //LoadBoard();
             if (CheckForWinners(out txt))
             {
-                /*MoveResultModel mr = new MoveResultModel();
-                mr.RedirectLink = Url.Action("Index", "Game");
-                mr.WinnerInfo = txt;
-                mr.x = s.X;
-                mr.y = s.Y;
-                return Json(mr, JsonRequestBehavior.AllowGet);*/
                 return MoveResult(s.X, s.Y, txt);
             }
             else
             {
-                /*MoveResultModel mr = new MoveResultModel();
-                mr.x = s.X;
-                mr.y = s.Y;
-                return Json(mr, JsonRequestBehavior.AllowGet);*/
                 return MoveResult(s.X, s.Y, txt);
             }
         }
