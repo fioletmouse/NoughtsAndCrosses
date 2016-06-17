@@ -8,47 +8,50 @@ namespace NoughtsAndCrosses.Classes
     public class ChooseMoveLogic
     {
         /// <summary>
-        /// Implementation of the minimax algorithm.  Determines the best move for the current 
-        /// board by playing every move combination until the end of the game.
+        /// Реализация алгоритма минимакса. Проходим все шаги до конца игры в поисках лучшего хода.
         /// </summary>
-        public static CellInfo GetBestMove(Blank gb, CellOwner p)
+        public static CellInfo GetBestMove(Blank game, CellOwner point)
         {
-            CellInfo? bestSpace = null;
-            List<CellInfo> openSpaces = gb.OpenSquares;
-            Blank newBoard;
+            // если не нашли лучший ход, то данные остаются пустыми, т.к. это структура указывает nullable тип
+            CellInfo? bestCell = null;  
+            List<CellInfo> emptyCells = game.EmptyCells;
+            Blank emulationGame;    // хранит копию игры с текущего шага
 
-            for (int i = 0; i < openSpaces.Count; i++)
+            // Проверяем, проходя по дереву, для всех пустых ячеек
+            for (int i = 0; i < emptyCells.Count; i++)
             {
-                newBoard = gb.Clone();
-                CellInfo newSpace = openSpaces[i];
+                emulationGame = game.Clone();
+                CellInfo currentCell = emptyCells[i];
 
-                newBoard[newSpace.X, newSpace.Y] = p;
+                emulationGame[currentCell.X, currentCell.Y] = point;
 
-                if (newBoard.Winner == CellOwner.Empty && newBoard.OpenSquares.Count > 0)
+                // Если нет победителя, но еще есть свободные ячейки, спускаемся ниже по дереву
+                if (emulationGame.Winner == CellOwner.Empty && emulationGame.EmptyCells.Count > 0)
                 {
-                    CellInfo tempMove = GetBestMove(newBoard, ((CellOwner)(-(int)p)));  //a little hacky, inverts the current player
-                    newSpace.Rank = tempMove.Rank;
+                    CellInfo tempMove = GetBestMove(emulationGame, ((CellOwner)(-(int)point)));  // переключаем игрока (ходы через одного)
+                    currentCell.Rank = tempMove.Rank;
                 }
                 else
                 {
-                    if (newBoard.Winner == CellOwner.Empty)
-                        newSpace.Rank = 0;
-                    else if (newBoard.Winner == CellOwner.X)
-                        newSpace.Rank = -1;
-                    else if (newBoard.Winner == CellOwner.O)
-                        newSpace.Rank = 1;
+                    // оцениваем ход
+                    if (emulationGame.Winner == CellOwner.Empty)
+                        currentCell.Rank = 0;
+                    else if (emulationGame.Winner == CellOwner.X)
+                        currentCell.Rank = -1;
+                    else if (emulationGame.Winner == CellOwner.O)
+                        currentCell.Rank = 1;
                 }
 
-                //If the new move is better than our previous move, take it
-                if (bestSpace == null ||
-                   (p == CellOwner.X && newSpace.Rank < ((CellInfo)bestSpace).Rank) ||
-                   (p == CellOwner.O && newSpace.Rank > ((CellInfo)bestSpace).Rank))
+                // Если текущий шаг лучше, чем найденный ранее, выбираем его
+                if (bestCell == null ||
+                   (point == CellOwner.X && currentCell.Rank < ((CellInfo)bestCell).Rank) ||
+                   (point == CellOwner.O && currentCell.Rank > ((CellInfo)bestCell).Rank))
                 {
-                    bestSpace = newSpace;
+                    bestCell = currentCell;
                 }
             }
 
-            return (CellInfo)bestSpace;
+            return (CellInfo)bestCell;
         }
     }
 }
