@@ -1,0 +1,18 @@
+﻿@using NoughtsAndCrosses.Models
+@model List<Overall>
+@{
+    if(Model.Count > 0)
+    {
+        foreach (var summary in Model)
+        {
+            //привести див в порядок, а то все идентификаторы открыты
+                @summary.ResultType
+                 @summary.Count
+
+        }
+    }
+    else
+    {
+        <p>Пусто</p>
+    }
+}

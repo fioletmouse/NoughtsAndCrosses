@@ -147,8 +147,7 @@
     </Compile>
     <Compile Include="Models\DomainModel.cs" />
     <Compile Include="Models\GameRepository.cs" />
-    <Compile Include="Models\InputModel.cs" />
-    <Compile Include="Models\MoveResultModel.cs" />
+    <Compile Include="Models\ViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\GameContext.cs" />
   </ItemGroup>
@@ -223,6 +222,10 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Views\Game\LeftPanel.cshtml" />
+    <Content Include="Views\Game\_GamesInfo.cshtml" />
+    <Content Include="Views\Game\_MovesInfo.cshtml" />
+    <Content Include="Views\Game\_Overall.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

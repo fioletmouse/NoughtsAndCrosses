@@ -34,6 +34,7 @@ namespace NoughtsAndCrosses.Controllers
         {
             repo.UpdateGameResult(Convert.ToInt32(Session["GameId"]), Text);
         }
+
         public bool CheckForWinners(out string msg)
         {
             CellOwner? p = Game.Winner;
@@ -116,5 +117,27 @@ namespace NoughtsAndCrosses.Controllers
                 return MoveResult(s.X, s.Y, txt);
             }
         }
+
+
+        public ActionResult GetGamesList(string ForSession)
+        {
+            string UserSession = (ForSession == "true") ? Session.SessionID : null;
+
+            var list = repo.GetGamesInfo(UserSession).ToList();
+            return PartialView("_GamesInfo", list);
+        }
+
+        public ActionResult GetMovesByGameId(string GameId)
+        {
+            var list = repo.GetMovesInfo(GameId).ToList();
+            return PartialView("_MovesInfo", list);
+        }
+
+        public ActionResult Overall()
+        {
+            var list = repo.GetOverall().ToList();
+            return PartialView("_Overall", list);
+        }
+
     }
 }

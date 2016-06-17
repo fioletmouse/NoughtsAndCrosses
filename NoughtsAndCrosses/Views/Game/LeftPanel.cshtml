@@ -1,0 +1,31 @@
+﻿<div class="row">
+    @Html.ActionLink("Полная статистика", "GetGamesList",  "Game", null, 
+       new {@class="btn btn-primary", data_toggle="modal", onclick="UploadStatisticPartialView(this, event, null)"})
+    @Html.ActionLink("Текущие игры", "GetGamesList",  "Game", null, 
+       new {@class="btn btn-primary", data_toggle="modal", onclick="UploadStatisticPartialView(this, event, true)"})
+    @Html.ActionLink("Новая игра", "Index",  "Game")
+    <div id="Overall"></div>
+</div>
+
+
+<div id="myModal" class="modal fade">
+   <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Заголовок модального окна -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Заголовок модального окна</h4>
+      </div>
+      <!-- Основное содержимое модального окна -->
+      <div class="modal-body">
+          @*@Html.Action("Add")*@
+      </div>
+      <!-- Футер модального окна -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary">Сохранить изменения</button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -14,8 +14,14 @@
             </div>
         </div>
         <div class="row" >
-            <div class="col-xs-6  col-xs-offset-3" style="background-color:aliceblue;">
+            <div class="col-xs-3" style="background-color:aliceblue;">
+                @RenderSection("LeftPanel", required: true)
+            </div>
+            <div class="col-xs-6" style="background-color:aliceblue;">
                 @RenderBody()
+            </div>
+            <div class="col-xs-3" style="background-color:aliceblue;">
+                @RenderSection("RightChat", required: true)
             </div>
         </div>
     </div>
