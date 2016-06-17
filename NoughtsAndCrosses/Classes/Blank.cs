@@ -33,37 +33,40 @@ namespace NoughtsAndCrosses.Classes
     }
     
     /// <summary>
-    /// Abstract class for creating new game boards, contains all of the logic needed for the AI to play the game.
+    /// Абстрактный класс для игрового поля
     /// </summary>
     public abstract class Blank
     {
-
-        /// Массив со всеми ячейками. Хранится в них могут только значения из перечисления
+        // Массив со всеми ячейками. Храниться в них могут только значения из перечисления CellOwner
         public CellOwner[,] cells;
 
-        /// Индексатор для ячейки. Получаем/устанавливаем владельца
-        public abstract CellOwner this[int x, int y] { get; set; }
+        // Индексатор для ячейки. Получаем/устанавливаем владельца
+        public  CellOwner this[int x, int y]
+        {
+            get
+            {
+                return cells[x, y];
+            }
 
-        /// Пустых ячеек нет
-        public abstract bool IsFull { get; }
+            set
+            {
+                cells[x, y] = value;
+            }
+        }
 
+        // Пустых ячеек нет
+        public bool IsFull { get { return !cells.Cast<CellOwner>().Any(x => x == CellOwner.Empty); } }
 
-        /// Размер доски
+        // Полный размер игрового поля
         public abstract int Size { get; }
 
-        /// <summary>
-        /// List of the open spaces available on the current board.
-        /// </summary>
-        public abstract List<CellInfo> OpenSquares { get; }
+        // Список с пустыми ячейками
+        public abstract List<CellInfo> EmptyCells { get; }
 
-        /// <summary>
-        /// Determines if there is a winner on the current board.
-        /// </summary>
+        // Определяем победителя
         public abstract CellOwner Winner { get; }
 
-        /// <summary>
-        /// Makes a deap copy of the current board
-        /// </summary>
+        // Создание полной копии игрового поля. Нужно для выбора оптимального хода
         public abstract Blank Clone();
     }
 }

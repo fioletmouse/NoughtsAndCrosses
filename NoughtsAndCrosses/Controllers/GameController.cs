@@ -10,34 +10,20 @@ namespace NoughtsAndCrosses.Controllers
 {
     public class GameController : Controller
     {
-        private Blank gb;
-        public GameController()
-        {
-            
-
-        }
-        //
-        // GET: /Game/
+        private Blank Game;
 
         public ActionResult Index()
         {
-            //gb = new Blank3x3();
-            //if (HttpContext.Session["Game"] == null)
-            //{
-                gb = new Blank3x3();
-                Session["Game"] = gb;
+            Game = new Blank3x3();
+            Session["Game"] = Game;
 
-            //}
-
-            //LoadBoard();
             return View();
         }
 
-        //
-        // GET: /Game/Details/5
+
         public bool CheckForWinners(out string msg)
         {
-            CellOwner? p = gb.Winner;
+            CellOwner? p = Game.Winner;
 
             if (p == CellOwner.X)
             {
@@ -49,7 +35,7 @@ namespace NoughtsAndCrosses.Controllers
                 msg = "You Win!";
                 return true;
             }
-            else if (gb.IsFull)
+            else if (Game.IsFull)
             {
                 msg = "Cat's Game";
                 return true;
@@ -57,63 +43,66 @@ namespace NoughtsAndCrosses.Controllers
             msg = null;
             return false;
         }
-       
-        public ActionResult Test(int x, int y)
+        
+        [ChildActionOnly]
+        private JsonResult MoveResult(int x, int y, string WinnerInfo)
         {
-            MoveResultModel mr = new MoveResultModel();
-            mr.RedirectLink = Url.Action("Index", "Game");
-            mr.x = 2;
-            mr.y = 2;
-            return Json(mr, JsonRequestBehavior.AllowGet);
+            MoveResultModel result = new MoveResultModel();
+            result.RedirectLink = Url.Action("Index", "Game");
+            result.x = x;
+            result.y = y;
+            result.WinnerInfo = WinnerInfo;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Move(int x, int y)
         {
+            // запоминаем сделанный игроком шаг
+            Game = (Blank)Session["Game"];
 
-            gb = (Blank)Session["Game"];
-            CellInfo s = new CellInfo(x, y);//(CellInfo)sender;
+            CellInfo s = new CellInfo(x, y);
+            Game[x, y] = CellOwner.O;
 
-            //gb[s.X, s.Y] = Player.O;
-            gb[x, y] = CellOwner.O;
-            //LoadBoard();
             string txt = null;
             if (CheckForWinners(out txt))
             {
-                MoveResultModel mr = new MoveResultModel();
+              /*  MoveResultModel mr = new MoveResultModel();
                 mr.RedirectLink = Url.Action("Index", "Game");
-                mr.WinnerInfo = txt;
-                return Json(mr, JsonRequestBehavior.AllowGet);
+                mr.WinnerInfo = txt;*/
+                return MoveResult(-1, -1, txt);//   Json(mr, JsonRequestBehavior.AllowGet);
             }
                 //Form1_Load(null, new EventArgs());  //Winner was found, reload the game
 
-            if (gb.OpenSquares.Count == gb.Size) //if all spaces are open, randomly pick one for excitement
+            if (Game.EmptyCells.Count == Game.Size) //if all spaces are open, randomly pick one for excitement
             {
                 Random r = new Random();
                 s = new CellInfo(r.Next(0, 3), r.Next(0, 3));
             }
             else
             {
-                s = ChooseMoveLogic.GetBestMove(gb, CellOwner.X);
+                s = ChooseMoveLogic.GetBestMove(Game, CellOwner.X);
             }
 
-            gb[s.X, s.Y] = CellOwner.X;
+            Game[s.X, s.Y] = CellOwner.X;
 
             //LoadBoard();
             if (CheckForWinners(out txt))
             {
-                MoveResultModel mr = new MoveResultModel();
+                /*MoveResultModel mr = new MoveResultModel();
                 mr.RedirectLink = Url.Action("Index", "Game");
                 mr.WinnerInfo = txt;
                 mr.x = s.X;
                 mr.y = s.Y;
-                return Json(mr, JsonRequestBehavior.AllowGet);
+                return Json(mr, JsonRequestBehavior.AllowGet);*/
+                return MoveResult(s.X, s.Y, txt);
             }
             else
             {
-                MoveResultModel mr = new MoveResultModel();
+                /*MoveResultModel mr = new MoveResultModel();
                 mr.x = s.X;
                 mr.y = s.Y;
-                return Json(mr, JsonRequestBehavior.AllowGet);
+                return Json(mr, JsonRequestBehavior.AllowGet);*/
+                return MoveResult(s.X, s.Y, txt);
             }
         }
     }

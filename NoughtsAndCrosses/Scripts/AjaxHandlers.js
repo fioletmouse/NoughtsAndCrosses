@@ -15,8 +15,10 @@ function makeComputerMove(divTag) {
         },
 
         success: function (response, status, xhr) {
-            $("div[row=" + response.x + "]");
-            $("div[row=" + response.x + "][col=" + response.y + "]").addClass("computer");
+            if (response.x != -1) {
+                $("div[row=" + response.x + "]");
+                $("div[row=" + response.x + "][col=" + response.y + "]").addClass("computer");
+            }
             if (response.WinnerInfo != null && response.WinnerInfo != "") {
                 alert(response.WinnerInfo);
                 window.location.href = response.RedirectLink;
