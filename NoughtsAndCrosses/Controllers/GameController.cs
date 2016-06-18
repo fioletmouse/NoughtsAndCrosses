@@ -34,7 +34,6 @@ namespace NoughtsAndCrosses.Controllers
         [ChildActionOnly]
         private JsonResult MoveResult(MoveResultModel result)
         {
-            result.RedirectLink = Url.Action("Index", "Game");
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

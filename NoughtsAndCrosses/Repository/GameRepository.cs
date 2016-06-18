@@ -71,7 +71,6 @@ namespace NoughtsAndCrosses.Repository
                    select new GameInfoView
                    {
                        Id = game.Id,
-                       PlayerName = game.PlayerName,
                        Result = Settings.GetOverAllDefinition(game.Result),
                        StartDate = game.CreatedOn.ToShortDateString(),
                        StartTime = game.CreatedOn.ToShortTimeString(),

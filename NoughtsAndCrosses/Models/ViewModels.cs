@@ -7,7 +7,6 @@ namespace NoughtsAndCrosses.Models
 {
     public class MoveResultModel
     {
-        public string RedirectLink { get; set; }
         public string WinnerInfo { get; set; }
         public int x { get; set; }
         public int y { get; set; }
@@ -16,7 +15,6 @@ namespace NoughtsAndCrosses.Models
     public class GameInfoView
     {
         public int Id { get; set; }
-        public string PlayerName { get; set; }
         public string Result { get; set; }
         public string StartDate { get; set; }
         public string StartTime { get; set; }

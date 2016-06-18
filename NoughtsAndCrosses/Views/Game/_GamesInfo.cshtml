@@ -7,12 +7,7 @@
         {
             <div id="@summary.Id" onclick="GetMovesInfo(this)" data-toggle="collapse" data-target="#MoveInfo_@summary.Id" class="panel panel-default changedMargin">
                 <div class="panel-heading">  
-                    Результат: <b>@summary.Result</b> от <small>@summary.StartDate в @summary.StartTime</small>  
-
-                    @if (@summary.PlayerName!= null) 
-                    {
-                        <p>Игрок @summary.PlayerName</p>
-                    }
+                    Результат: <b>@summary.Result</b> от <small>@summary.StartDate в @summary.StartTime</small> 
                     Ходов <span class="badge">@summary.MoveCount</span>
                     <span class="glyphicon glyphicon-chevron-down" style="float:right"></span>
                 </div>
