@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using NoughtsAndCrosses.Classes;
-using NoughtsAndCrosses.Repository;
 using System.Data.Entity;
 using NoughtsAndCrosses.Models;
 
-namespace NoughtsAndCrosses.Classes
+namespace NoughtsAndCrosses.Repository
 {
     /// <summary>
     /// Репозитарий для работы с БД. Контект идет инъекцией
     /// </summary>
-    public class GameRepository : NoughtsAndCrosses.Classes.IGameRepository
+    public class GameRepository : IGameRepository
     {
         private GameContext _db;
         public GameRepository(GameContext dbContext)
@@ -30,10 +29,10 @@ namespace NoughtsAndCrosses.Classes
         }
 
         // Обновляем результат игры, если он выявлен
-        public void UpdateGameResult(int GameId, string Result)
+        public void UpdateGameResult(int GameId, GameResult Winner)
         {
             GameInfo game = _db.GameInfo.Where(g => g.Id == GameId).Single();
-            game.Result = Result;
+            game.Result = (int)Winner;
             _db.SaveChanges();
         }
 
@@ -53,7 +52,11 @@ namespace NoughtsAndCrosses.Classes
             _db.SaveChanges();
         }
 
-        // Получаем список игры (общим или для конкретной сессии)
+        /// <summary>
+        ///  Получаем список игры (общим или для конкретной сессии)
+        /// </summary>
+        /// <param name="SesionId">Идентификатор сессии, если нужно найти только игры текущей сессии, оставить пустым, если нужен полный список</param>
+        /// <returns>Список игр</returns>
         public IEnumerable<GameInfoView> GetGamesInfo(string SesionId)
         {
             IEnumerable<GameInfo> temp = _db.GameInfo.ToList();
@@ -68,7 +71,7 @@ namespace NoughtsAndCrosses.Classes
                    {
                        Id = game.Id,
                        PlayerName = game.PlayerName,
-                       Result = game.Result ?? "Игра не закончена",
+                       Result = Settings.GetResultDefinition(game.Result),
                        CreatedOn = game.CreatedOn,
                        MoveCount = joined.Count()
                    } into model
@@ -95,10 +98,14 @@ namespace NoughtsAndCrosses.Classes
         // Получение полной статистики
         public IEnumerable<Overall> GetOverall()
         {
-            return from game in _db.GameInfo
-                      group game by game.Result into model
-                   select new Overall { ResultType = model.Key ?? "Игра не закончена", Count = model.Count() };
-           
+            // Приведение к Enumerable для использования функции, иначе нужно дописывать метод
+            var list = _db.GameInfo.GroupBy(p => p.Result)
+                                   .AsEnumerable()
+                                   .Select(p => new Overall { ResultType = Settings.GetResultDefinition(p.Key), 
+                                                              Count = p.Count() });
+
+
+            return list;
         }
     }
 }

@@ -33,6 +33,15 @@ namespace NoughtsAndCrosses.Classes
     }
     
     /// <summary>
+    /// Перечисление с результатами игры
+    /// </summary>
+    public enum GameResult 
+    {
+        X,
+        O,
+        Unknown       
+    }
+    /// <summary>
     /// Абстрактный класс для игрового поля
     /// </summary>
     public abstract class Blank
@@ -55,7 +64,13 @@ namespace NoughtsAndCrosses.Classes
         }
 
         // Пустых ячеек нет
-        public bool IsFull { get { return !cells.Cast<CellOwner>().Any(x => x == CellOwner.Empty); } }
+        public bool IsFull
+        { 
+            get 
+            { 
+                return !cells.Cast<CellOwner>().Any(x => x == CellOwner.Empty); 
+            } 
+        }
 
         // Полный размер игрового поля
         public abstract int Size { get; }

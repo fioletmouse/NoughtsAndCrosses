@@ -17,7 +17,7 @@ namespace NoughtsAndCrosses.Models
         public DateTime CreatedOn { get; set; }
         [MaxLength(100)]
         public string PlayerName { get; set; }
-        public string Result { get; set; }
+        public int? Result { get; set; }
         
         // навигация на историю ходов
         public List<MovesInfo> Moves { get; set; }
