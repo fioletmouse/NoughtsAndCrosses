@@ -3,24 +3,25 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Крестики-нолики</title>
+    <title>Крестики-котики</title>
     @Styles.Render("~/Content/css")
 </head>
 <body>
-    <div class="container" style="background-color:gold">
-         <div class="row" >
-            <div class="col-xs-4 col-xs-offset-4 text-center" style="background-color:beige">
-                <h2>Крестики - нолики</h2>
+    <div class="container">
+         <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center">
+                <h1>Крестики - котики <img src="Content/img/Header.png" class="hidden-xs" alt="Кот"/></h1>
             </div>
+
         </div>
-        <div class="row" >
-            <div class="col-xs-3" style="background-color:aliceblue;">
+        <div class="row">
+            <div class="col-xs-3">
                 @RenderSection("LeftPanel", required: true)
             </div>
-            <div class="col-xs-6" style="background-color:aliceblue;">
+            <div class="col-xs-6">
                 @RenderBody()
             </div>
-            <div class="col-xs-3" style="background-color:aliceblue;">
+            <div class="col-xs-3">
                 @RenderSection("RightChat", required: true)
             </div>
         </div>

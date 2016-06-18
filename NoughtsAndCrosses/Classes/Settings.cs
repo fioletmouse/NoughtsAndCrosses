@@ -13,14 +13,14 @@ namespace NoughtsAndCrosses.Classes
 
         private static Dictionary<GameResult, string> DefaultGameResult = new Dictionary<GameResult, string>
         {
-            { GameResult.X, "Победа X"},
-            { GameResult.O, "Победа O"},
+            { GameResult.X, "Победa Котикa"},
+            { GameResult.O, "Победa Игрока"},
             { GameResult.Unknown, "Ничья"},
         };
         private const string NotFinished = "Игра не закончена";
         
         // Получение результата игры, вынесено методом для обработки пустого значение
-        public static string GetResultDefinition(int? result)
+        public static string GetOverAllDefinition(int? result)
         {
             string ret = NotFinished;
             if (result.HasValue)
@@ -32,9 +32,15 @@ namespace NoughtsAndCrosses.Classes
 
         public static Dictionary<GameResult, string> DefaultMessage = new Dictionary<GameResult, string>
         {
-            { GameResult.X, "Компьютер выиграл"},
-            { GameResult.O, "Вы выиграли"},
+            { GameResult.X, "Котик выиграл."},
+            { GameResult.O, "Вы выиграли."},
             { GameResult.Unknown, "Ничья!"},
+        };
+
+        public static Dictionary<CellOwner, string> PlayersName = new Dictionary<CellOwner, string>
+        {
+            { CellOwner.O, "Игрок"},
+            { CellOwner.X, "Котик"}
         };
     }
 }

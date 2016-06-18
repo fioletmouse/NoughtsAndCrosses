@@ -1,18 +1,15 @@
 ﻿@using NoughtsAndCrosses.Models
 @model List<MovesInfoView>
 @{
-    if(Model.Count > 0)
+    if (Model.Count > 0)
     {
         foreach (var summary in Model)
         {
-            //привести див в порядок, а то все идентификаторы открыты
-                @summary.MoveOwner
-                 @summary.Point
-
+            <p>@summary.MoveOwner ходит @summary.Point</p> 
         }
     }
     else
     {
-        <p>Пусто</p>
+        <p>Нет данных</p>
     }
 }

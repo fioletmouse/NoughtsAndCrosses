@@ -65,14 +65,15 @@ namespace NoughtsAndCrosses.Repository
                 temp = temp.Where(x => x.SessionId == SesionId).ToList();
             }
             return from game in temp
+                   orderby game.Id descending
                    join move in _db.MovesInfo on game.Id equals move.GameInfo.Id
                                                  into joined
                    select new GameInfoView
                    {
                        Id = game.Id,
-                       PlayerName = game.PlayerName,
-                       Result = Settings.GetResultDefinition(game.Result),
-                       CreatedOn = game.CreatedOn,
+                       Result = Settings.GetOverAllDefinition(game.Result),
+                       StartDate = game.CreatedOn.ToShortDateString(),
+                       StartTime = game.CreatedOn.ToShortTimeString(),
                        MoveCount = joined.Count()
                    } into model
 
@@ -85,13 +86,12 @@ namespace NoughtsAndCrosses.Repository
         {
             int gameId = Convert.ToInt32(GameId);
 
-            var tmp = from game in _db.MovesInfo
-                  where game.GameInfo.Id == gameId
-                  select new MovesInfoView
+            var tmp = _db.MovesInfo.Where(x => x.GameInfo.Id == gameId).OrderBy(x => x.Id).AsEnumerable()
+                                    .Select(game => new MovesInfoView
                    {
-                       MoveOwner = game.MoveOwner,
+                       MoveOwner = Settings.PlayersName[(CellOwner)Enum.Parse(typeof(CellOwner), game.MoveOwner)],
                        Point = "строка=" + game.RowX + " столбец=" + game.ColY
-                   };
+                   });
             return tmp;
         }
 
@@ -101,8 +101,11 @@ namespace NoughtsAndCrosses.Repository
             // Приведение к Enumerable для использования функции, иначе нужно дописывать метод
             var list = _db.GameInfo.GroupBy(p => p.Result)
                                    .AsEnumerable()
-                                   .Select(p => new Overall { ResultType = Settings.GetResultDefinition(p.Key), 
-                                                              Count = p.Count() });
+                                   .Select(p => new Overall
+                                   {
+                                       ResultType = Settings.GetOverAllDefinition(p.Key), 
+                                       Count = p.Count() 
+                                   });
 
 
             return list;
