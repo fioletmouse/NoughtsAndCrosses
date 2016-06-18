@@ -160,6 +160,10 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\Alert.png" />
+    <Content Include="Content\img\Header.png" />
+    <Content Include="Content\img\SimonsCross.png" />
+    <Content Include="Content\img\SimonsNaught.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -229,6 +233,7 @@
     <Content Include="Views\Game\_GamesInfo.cshtml" />
     <Content Include="Views\Game\_MovesInfo.cshtml" />
     <Content Include="Views\Game\_Overall.cshtml" />
+    <Content Include="Views\Game\_Chat.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

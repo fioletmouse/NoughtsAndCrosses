@@ -1,0 +1,25 @@
+﻿<div class="row">
+     <div class="col-sm-12">
+        <img src="Content/img/Alert.png" alt="Сообщения" class='img-responsive pull-right hidden-xs'/>
+         <h5 class="visible-xs">Сообщения</h5>
+    </div>
+    <div class="col-sm-12">
+        <div id="Chat" class="panel panel-default"></div>
+    </div>
+</div>
+
+<div id="ShowResult" class="modal fade">
+   <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Заголовок модального окна -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Игра завершена</h4>
+      </div>
+      <!-- Основное содержимое модального окна -->
+      <div class="modal-body">
+        Хотите сыграть еще раз? @Html.ActionLink("Да", "Index", "Game", null, new { @class = "buttons", style="float:right" })
+      </div>
+    </div>
+  </div>
+</div>

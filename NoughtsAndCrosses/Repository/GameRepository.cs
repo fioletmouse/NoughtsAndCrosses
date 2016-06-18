@@ -72,7 +72,8 @@ namespace NoughtsAndCrosses.Repository
                        Id = game.Id,
                        PlayerName = game.PlayerName,
                        Result = Settings.GetResultDefinition(game.Result),
-                       CreatedOn = game.CreatedOn,
+                       StartDate = game.CreatedOn.ToShortDateString(),
+                       StartTime = game.CreatedOn.ToShortTimeString(),
                        MoveCount = joined.Count()
                    } into model
 

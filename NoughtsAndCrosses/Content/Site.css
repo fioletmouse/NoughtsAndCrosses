@@ -1,6 +1,26 @@
-﻿.player {
-background-color:green;
+﻿.blankCell {
+    border:solid 2px;
 }
-.computer {
-    background-color:yellow;
+
+.buttons {
+    color: black;
+    font-family:'Segoe Script';
+    font-size:large;
+    border:none;
+    background-color:white;
+}
+.buttons:hover {
+    color: red;
+}
+h1, h3, h5 {
+    font-family:'Segoe Script';
+    color: black;
+}
+#Chat {
+    height: 100px;
+    max-height:200px;
+    overflow-y: scroll;
+}
+.gg {
+margin-bottom:8px;
 }

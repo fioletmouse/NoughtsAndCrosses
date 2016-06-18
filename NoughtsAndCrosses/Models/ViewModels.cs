@@ -18,7 +18,8 @@ namespace NoughtsAndCrosses.Models
         public int Id { get; set; }
         public string PlayerName { get; set; }
         public string Result { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public string StartDate { get; set; }
+        public string StartTime { get; set; }
         public int MoveCount { get; set; }
     }
 

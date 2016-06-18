@@ -1,23 +1,27 @@
 ﻿@using NoughtsAndCrosses.Models
 @model List<GameInfoView>
 @{
-    if(Model.Count > 0)
+    if (Model.Count > 0)
     {
         foreach (var summary in Model)
         {
-            //привести див в порядок, а то все идентификаторы открыты
-            <div style="border:solid 1px; padding:2px; margin:5px" class="quote" onclick="getajax(this)" id="@summary.Id">
-                @summary.Result
-                 @summary.PlayerName
+            <div id="@summary.Id" onclick="GetMovesInfo(this)" data-toggle="collapse" data-target="#MoveInfo_@summary.Id" class="panel panel-default gg">
+                <div class="panel-heading">  
+                    Результат: <b>@summary.Result</b> от <small>@summary.StartDate в @summary.StartTime</small>  
 
-                @summary.CreatedOn
-                @summary.MoveCount<br />
-                <div class="MoveInformation"></div>
+                    @if (@summary.PlayerName!= null) 
+                    {
+                        <p>Игрок @summary.PlayerName</p>
+                    }
+                    Ходов <span class="badge">@summary.MoveCount</span>
+                    <span class="glyphicon glyphicon-chevron-down" style="float:right"></span>
+                </div>
+                <div class="collapse panel-body" id="MoveInfo_@summary.Id"></div>
             </div>
         }
     }
     else
     {
-        <p>Пусто</p>
+        <p>Данне не найдены</p>
     }
 }
