@@ -1,12 +1,20 @@
 ﻿$(document).ready(function () {
+
     $("div.col-xs-4").click(function (e) {
-        $(this).html("<img src='Content/img/SimonsCross.png' class='img-responsive'/>")
-        makeComputerMove(this);
+        
+        // Ставим картинку и вызываем ход компьютера
+        if ($(this).find("img").length == 0) {
+            $(this).html("<img src='Content/img/SimonsCross.png' class='img-responsive'/>")
+            makeComputerMove(this);
+        }
+        else {
+            appendTextToChart("Уже занято, Мяу!")
+        }
     });
 
     window.addEventListener("resize", resize);
     resize();
-    appendTextToChart("Играем!");
+    appendTextToChart("Играем! ур...");
     GetOverall();
 });
 
@@ -22,7 +30,7 @@ function appendTextToChart(txt)
 
 function makeComputerMove(divTag) {
 
-    appendTextToChart("Move: x:" + $(divTag).attr("row") + " y:" + $(divTag).attr("col"));
+    //appendTextToChart("Move: x:" + $(divTag).attr("row") + " y:" + $(divTag).attr("col"));
 
     $.ajax({
         url: 'Game/Move',

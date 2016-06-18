@@ -21,6 +21,6 @@ h1, h3, h5 {
     max-height:200px;
     overflow-y: scroll;
 }
-.gg {
-margin-bottom:8px;
+.changedMargin {
+    margin-bottom:8px;
 }
