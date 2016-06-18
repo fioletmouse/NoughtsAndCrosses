@@ -15,7 +15,7 @@ namespace NoughtsAndCrosses.Classes
         
         public Blank3x3()
         {
-            cells = new CellOwner[3, 3]; // { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+            cells = new CellOwner[3, 3];
         }
 
         public override int Size 
@@ -23,34 +23,7 @@ namespace NoughtsAndCrosses.Classes
             get { return currentSize * currentSize; } 
         }
 
-        /*public override CellOwner this[int x, int y]
-        {
-            get
-            {
-                return cells[x, y];
-            }
-
-            set
-            {
-                cells[x, y] = value;
-            }
-        }*/
-
-       /* public override bool IsFull
-        {
-            get
-            {
-                return !cells.Cast<CellOwner>().Any(x => x == CellOwner.Empty);
-        */
-
-               /* foreach (CellOwner i in cells)
-                {
-                    if (i == CellOwner.Empty) { return false; }
-                }
-                return true;*/
-       /*     }
-        }*/
-
+        // Получаем список со всеми пустыми ячейками
         public override List<CellInfo> EmptyCells
         {
             get
