@@ -11,9 +11,9 @@ namespace NoughtsAndCrosses.Controllers
 {
     public class GameController : Controller
     {
-        private Blank Game;
-        private IGameRepository repo;
-        private MiddleLayer ml;
+        private Blank Game;     // объект с игрой
+        private IGameRepository repo; // репозиторий
+        private MiddleLayer ml; // слой для работы игра+репозаторий совместно
 
         public GameController()
         {
@@ -21,6 +21,7 @@ namespace NoughtsAndCrosses.Controllers
             ml = new MiddleLayer(repo);
         }
 
+        // метод для начала игры
         public ActionResult Index()
         {
             // Объект новой игры
@@ -37,6 +38,7 @@ namespace NoughtsAndCrosses.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        // ход игрока
         public ActionResult Move(int x, int y)
         {
             ml.Game = (Blank)Session["Game"];
@@ -45,6 +47,7 @@ namespace NoughtsAndCrosses.Controllers
             return MoveResult(result);
         }
 
+        // Методы для получения статистики
         public ActionResult GetGamesList(string ForSession)
         {
             string UserSession = (ForSession == "true") ? Session.SessionID : null;
@@ -64,6 +67,5 @@ namespace NoughtsAndCrosses.Controllers
             var list = repo.GetOverall().ToList();
             return PartialView("_Overall", list);
         }
-
     }
 }
