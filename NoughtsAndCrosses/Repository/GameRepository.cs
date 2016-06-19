@@ -9,7 +9,7 @@ using NoughtsAndCrosses.Models;
 namespace NoughtsAndCrosses.Repository
 {
     /// <summary>
-    /// Репозитарий для работы с БД. Контект идет инъекцией
+    /// Репозиторий для работы с БД. Контект идет инъекцией
     /// </summary>
     public class GameRepository : IGameRepository
     {

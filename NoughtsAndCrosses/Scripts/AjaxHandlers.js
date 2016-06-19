@@ -1,7 +1,11 @@
 ﻿$(document).ready(function () {
 
+    window.addEventListener("resize", resize);
+    resize();
+    appendTextToChart("Играем! ур...");
+    GetOverall();
+
     $("div.col-xs-4").click(function (e) {
-        
         // Ставим картинку и вызываем ход компьютера
         if ($(this).find("img").length == 0) {
             $(this).html("<img src='Content/img/SimonsCross.png' class='img-responsive'/>")
@@ -11,16 +15,11 @@
             appendTextToChart("Уже занято, Мяу!")
         }
     });
-
-    window.addEventListener("resize", resize);
-    resize();
-    appendTextToChart("Играем! ур...");
-    GetOverall();
 });
 
 function resize()
 {
-    $("div.blankCell").height($("div.blankCell").width())
+    $("div.blankCell").height($("div.blankCell").width());
 }
 
 function appendTextToChart(txt)
@@ -54,7 +53,8 @@ function makeComputerMove(divTag) {
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            //show the error somewhere - but this is a bad solution
+            alert("Мяв! Что-то случилось :( Попробуйте начать новую игру или сыграем позже.");
+            console.log(errorThrown);
         }
     })
 }
@@ -70,7 +70,7 @@ function GetOverall() {
             $('#Overall').html(response);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(textStatus)
+            console.log("GetOverall' error occures: " + errorThrown);
         }
     })
 }
@@ -89,7 +89,7 @@ function UploadStatisticPartialView(ctrl, e, forSession) {
             $('#ReportMovdal').modal('show');
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            $('#ReportMovdal div.modal-body').html("<div>Results are not avaliable now. <br /> " + textStatus + "</div>");
+            $('#ReportMovdal div.modal-body').html("<div>Котик устал, котик не хочет работать. <br />Лови ошибку: " + errorThrown + "</div>");
             $('#ReportMovdal').modal('show');
         }
     })
@@ -106,7 +106,8 @@ function GetMovesInfo(htmlTag) {
             $('div#MoveInfo_' + htmlTag.id).html(response);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert("Sorry, this function is now avaliable");
+            $('div#MoveInfo_' + htmlTag.id).html("<div>Объявляю забастовку! Не хочу работать! <br /> Лови ошибку: " + errorThrown + "</div>");
         }
     })
 }
+
