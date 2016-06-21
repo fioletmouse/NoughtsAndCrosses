@@ -12,108 +12,100 @@ namespace NoughtsAndCrosses.Classes
     /// </summary>
     public class MiddleLayer
     {
-        private IGameRepository repo;
+        private IGameRepository Repo;
+
         public Blank Game { get; set; }
         public int GameId { get; set; }
 
-        // Передаем зависимостьчерез конструктор. Класс работает с БД исключительно через репозитарий
+        // Передаем зависимость через конструктор. Класс работает с БД исключительно через репозитарий
         public MiddleLayer(IGameRepository Repository)
         {
-            repo = Repository;
+            Repo = Repository;
         }
 
         // Функция, которая вызывается из контроллера при ходе игрока
         public MoveResultModel Move(int x, int y)
         {
-            string txt = null;
+            string Txt = null;
 
             // Записываем сделанный игроком шаг
-            CellInfo s = new CellInfo(x, y);
-            MakeMove(Game, s, CellOwner.O);
+            CellInfo Cell = new CellInfo(x, y);
+            MakeMove(Game, Cell, CellOwner.O);
 
             // Проверяем, есть ли победитель и возвращаем сообщение
-            if (CheckForWinners(out txt))
+            if (CheckForWinners(out Txt))
             {
                 // -1 - чтобы на стороне клиента не отмечать никакую ячейку, если игрок выиграл при своем ходе
-                return MoveResult(-1, -1, txt);
+                return MoveResult(-1, -1, Txt);
             }
 
+            Cell = ChooseMoveLogic.GetBestMove(Game, CellOwner.X);
 
-            /*if (Game.EmptyCells.Count == Game.Size)
-            {
-                Random r = new Random();
-                s = new CellInfo(r.Next(0, 3), r.Next(0, 3));
-            }
-            else*/
-            {
-                s = ChooseMoveLogic.GetBestMove(Game, CellOwner.X);
-            }
+            MakeMove(Game, Cell, CellOwner.X);
 
-            MakeMove(Game, s, CellOwner.X);
-
-            if (CheckForWinners(out txt))
+            if (CheckForWinners(out Txt))
             {
-                return MoveResult(s.X, s.Y, txt);
+                return MoveResult(Cell.X, Cell.Y, Txt);
             }
             else
             {
-                return MoveResult(s.X, s.Y, txt);
+                return MoveResult(Cell.X, Cell.Y, Txt);
             }
         }
 
         #region Private methods
         // Фиксируем шаг и записываем его в БД
-        private void MakeMove(Blank game, CellInfo s, CellOwner owner)
+        private void MakeMove(Blank Game, CellInfo Cell, CellOwner Owner)
         {
-            game[s.X, s.Y] = owner;
-            repo.AddMove(GameId, s, owner);
+            Game[Cell.X, Cell.Y] = Owner;
+            Repo.AddMove(GameId, Cell, Owner);
         }
         
         // Собираем возвращаемый на клиента объект. Тут собираются параметры, связанные с самой игрой
         private MoveResultModel MoveResult(int x, int y, string WinnerInfo)
         {
-            MoveResultModel result = new MoveResultModel();
-            result.x = x;
-            result.y = y;
-            result.WinnerInfo = WinnerInfo;
-            return result;
+            MoveResultModel Result = new MoveResultModel();
+            Result.x = x;
+            Result.y = y;
+            Result.WinnerInfo = WinnerInfo;
+            return Result;
         }
 
         // Записываем победителя
         private void WinHandler(GameResult Winner)
         {
-            repo.UpdateGameResult(GameId, Winner);
+            Repo.UpdateGameResult(GameId, Winner);
         }
 
         /// <summary>
         /// Проверяем текущую игру на наличие победителя
         /// </summary>
-        /// <param name="msg"> выходной параметр - сообщение, отображаемое пользователю</param>
+        /// <param name="Msg"> выходной параметр - сообщение, отображаемое пользователю</param>
         /// <returns></returns>
-        private bool CheckForWinners(out string msg)
+        private bool CheckForWinners(out string Msg)
         {
-            CellOwner? p = Game.Winner;
+            CellOwner? Player = Game.Winner;
 
-            if (p == CellOwner.X)
+            if (Player == CellOwner.X)
             {
-                msg = Settings.DefaultMessage[GameResult.X];
+                Msg = Settings.DefaultMessage[GameResult.X];
                 // Записываем победителя в БД как результат игры
                 WinHandler(GameResult.X);
                 return true;
             }
-            else if (p == CellOwner.O)
+            else if (Player == CellOwner.O)
             {
-                msg = Settings.DefaultMessage[GameResult.O];
+                Msg = Settings.DefaultMessage[GameResult.O];
                 WinHandler(GameResult.O);
                 return true;
             }
             else if (Game.IsFull)
             {
-                msg = Settings.DefaultMessage[GameResult.Unknown];
+                Msg = Settings.DefaultMessage[GameResult.Unknown];
                 WinHandler(GameResult.Unknown);
                 return true;
             }
-            msg = null;
+            Msg = null;
             return false;
         }
         #endregion

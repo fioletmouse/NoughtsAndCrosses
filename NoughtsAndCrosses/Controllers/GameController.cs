@@ -12,13 +12,13 @@ namespace NoughtsAndCrosses.Controllers
     public class GameController : Controller
     {
         private Blank Game;     // объект с игрой
-        private IGameRepository repo; // репозиторий
-        private MiddleLayer ml; // слой для работы игра+репозаторий совместно
+        private IGameRepository Repo; // репозиторий
+        private MiddleLayer MiddleL; // слой для работы игра+репозаторий совместно
 
         public GameController()
         {
-            repo = new GameRepository(new GameContext());
-            ml = new MiddleLayer(repo);
+            Repo = new GameRepository(new GameContext());
+            MiddleL = new MiddleLayer(Repo);
         }
 
         // метод для начала игры
@@ -27,59 +27,59 @@ namespace NoughtsAndCrosses.Controllers
             // Объект новой игры
             Game = new Blank3x3();
             Session["Game"] = Game;
-            Session["GameId"] = repo.AddGame(Session.SessionID);
+            Session["GameId"] = Repo.AddGame(Session.SessionID);
 
             return View();
         }
 
         [ChildActionOnly]
-        private JsonResult MoveResult(MoveResultModel result)
+        private JsonResult MoveResult(MoveResultModel Result)
         {
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(Result, JsonRequestBehavior.AllowGet);
         }
 
         // ход игрока
         public ActionResult Move(int x, int y)
         {
-            ml.Game = (Blank)Session["Game"];
-            ml.GameId = Convert.ToInt32(Session["GameId"]);
-            MoveResultModel result = ml.Move(x, y);
-            return MoveResult(result);
+            MiddleL.Game = (Blank)Session["Game"];
+            MiddleL.GameId = Convert.ToInt32(Session["GameId"]);
+            MoveResultModel Result = MiddleL.Move(x, y);
+            return MoveResult(Result);
         }
 
-        // Получение списка цитат для полного вывода
-        private IEnumerable<GameInfoView> GetItemsPerPage(int page, IEnumerable<GameInfoView> list)
+        // Получение ограниченного списка игр
+        private IEnumerable<GameInfoView> GetItemsPerPage(int Page, IEnumerable<GameInfoView> List)
         {
-            int pageSize = 20;
-            var itemsToSkip = page * pageSize;
+            int PageSize = 20;
+            int itemsToSkip = Page * PageSize;
 
-            return list.Skip(itemsToSkip).Take(pageSize).ToList();
+            return List.Skip(itemsToSkip).Take(PageSize).ToList();
         }
 
         // Методы для получения статистики
-        public ActionResult GetGamesList(int? id, string ForSession)
+        public ActionResult GetGamesList(int? Id, string ForSession)
         {
             string UserSession = (ForSession == "true") ? Session.SessionID : null;
-            int page = id ?? 0;
+            int Page = Id ?? 0;
 
             // Получаем полный набор элементов
-            var FullList = repo.GetGamesInfo(UserSession);
+            var FullList = Repo.GetGamesInfo(UserSession);
 
-            var FilteredList = GetItemsPerPage(page, FullList);
+            var FilteredList = GetItemsPerPage(Page, FullList);
 
             return PartialView("_GamesInfo", FilteredList);
         }
 
         public ActionResult GetMovesByGameId(string GameId)
         {
-            var list = repo.GetMovesInfo(GameId).ToList();
-            return PartialView("_MovesInfo", list);
+            var List = Repo.GetMovesInfo(GameId).ToList();
+            return PartialView("_MovesInfo", List);
         }
 
         public ActionResult Overall()
         {
-            var list = repo.GetOverall().ToList();
-            return PartialView("_Overall", list);
+            var List = Repo.GetOverall().ToList();
+            return PartialView("_Overall", List);
         }
     }
 }

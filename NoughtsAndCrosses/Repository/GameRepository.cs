@@ -13,60 +13,60 @@ namespace NoughtsAndCrosses.Repository
     /// </summary>
     public class GameRepository : IGameRepository
     {
-        private GameContext _db;
-        public GameRepository(GameContext dbContext)
+        private GameContext _DB;
+        public GameRepository(GameContext DBContext)
         {
-            _db = dbContext;
+            _DB = DBContext;
         }
 
         // Сохраняем запись о начале игры при заходе на страницу/обновлении/нажатии на кнопку принудительного начала
-        public int AddGame(string sessionId)
+        public int AddGame(string SessionId)
         {
-            GameInfo entity = new GameInfo { CreatedOn = DateTime.Now, SessionId = sessionId };
-            _db.GameInfo.Add(entity);
-            _db.SaveChanges();
-            return entity.Id;
+            GameInfo Entity = new GameInfo { CreatedOn = DateTime.Now, SessionId = SessionId };
+            _DB.GameInfo.Add(Entity);
+            _DB.SaveChanges();
+            return Entity.Id;
         }
 
         // Обновляем результат игры, если он выявлен
         public void UpdateGameResult(int GameId, GameResult Winner)
         {
-            GameInfo game = _db.GameInfo.Where(g => g.Id == GameId).Single();
-            game.Result = (int)Winner;
-            _db.SaveChanges();
+            GameInfo Game = _DB.GameInfo.Where(g => g.Id == GameId).Single();
+            Game.Result = (int)Winner;
+            _DB.SaveChanges();
         }
 
         // Добавляем запись о ходе
-        public void AddMove(int GameId, CellInfo s, CellOwner owner)
+        public void AddMove(int GameId, CellInfo Cell, CellOwner Owner)
         {
-            GameInfo game = _db.GameInfo.Where(g => g.Id == GameId).Single();
-            MovesInfo entity = new MovesInfo
+            GameInfo Game = _DB.GameInfo.Where(g => g.Id == GameId).Single();
+            MovesInfo Entity = new MovesInfo
             {
-                MoveOwner = owner.ToString(),
-                RowX = s.X,
-                ColY = s.Y,
-                GameInfo = game
+                MoveOwner = Owner.ToString(),
+                RowX = Cell.X,
+                ColY = Cell.Y,
+                GameInfo = Game
             };
 
-            _db.MovesInfo.Add(entity);
-            _db.SaveChanges();
+            _DB.MovesInfo.Add(Entity);
+            _DB.SaveChanges();
         }
 
         /// <summary>
-        ///  Получаем список игры (общим или для конкретной сессии)
+        ///  Получаем список игры (общий или для конкретной сессии)
         /// </summary>
         /// <param name="SesionId">Идентификатор сессии, если нужно найти только игры текущей сессии, оставить пустым, если нужен полный список</param>
         /// <returns>Список игр</returns>
         public IEnumerable<GameInfoView> GetGamesInfo(string SesionId)
         {
-            IEnumerable<GameInfo> temp = _db.GameInfo.ToList();
+            var Temp = _DB.GameInfo.ToList();
             if (SesionId != null)
             {
-                temp = temp.Where(x => x.SessionId == SesionId).ToList();
+                Temp = Temp.Where(x => x.SessionId == SesionId).ToList();
             }
-            return from game in temp
+            return from game in Temp
                    orderby game.Id descending
-                   join move in _db.MovesInfo on game.Id equals move.GameInfo.Id
+                   join move in _DB.MovesInfo on game.Id equals move.GameInfo.Id
                                                  into joined
                    select new GameInfoView
                    {
@@ -82,24 +82,25 @@ namespace NoughtsAndCrosses.Repository
         }
 
         // Получаем список ходов для определенной игры
-        public IEnumerable<MovesInfoView> GetMovesInfo(string GameId)
+        public IEnumerable<MovesInfoView> GetMovesInfo(string StringGameId)
         {
-            int gameId = Convert.ToInt32(GameId);
+            int GameId = Convert.ToInt32(StringGameId);
 
-            var tmp = _db.MovesInfo.Where(x => x.GameInfo.Id == gameId).OrderBy(x => x.Id).AsEnumerable()
-                                    .Select(game => new MovesInfoView
-                   {
-                       MoveOwner = Settings.PlayersName[(CellOwner)Enum.Parse(typeof(CellOwner), game.MoveOwner)],
-                       Point = "строка=" + game.RowX + " столбец=" + game.ColY
-                   });
-            return tmp;
+            var Tmp = _DB.MovesInfo.Where(x => x.GameInfo.Id == GameId)
+                                   .OrderBy(x => x.Id).AsEnumerable()
+                                   .Select(game => new MovesInfoView
+                                   {
+                                       MoveOwner = Settings.PlayersName[(CellOwner)Enum.Parse(typeof(CellOwner), game.MoveOwner)],
+                                       Point = "строка=" + game.RowX + " столбец=" + game.ColY
+                                   });
+            return Tmp;
         }
 
         // Получение полной статистики
         public IEnumerable<Overall> GetOverall()
         {
             // Приведение к Enumerable для использования функции, иначе нужно дописывать метод
-            var list = _db.GameInfo.GroupBy(p => p.Result)
+            var List = _DB.GameInfo.GroupBy(p => p.Result)
                                    .AsEnumerable()
                                    .Select(p => new Overall
                                    {
@@ -108,7 +109,7 @@ namespace NoughtsAndCrosses.Repository
                                    });
 
 
-            return list;
+            return List;
         }
     }
 }

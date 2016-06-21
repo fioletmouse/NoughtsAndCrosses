@@ -11,16 +11,16 @@ namespace NoughtsAndCrosses.Classes
     class Blank3x3 : Blank
     {
         // размерность
-        private const int currentSize = 3;
+        private const int CurrentSize = 3;
         
         public Blank3x3()
         {
-            cells = new CellOwner[3, 3];
+            Cells = new CellOwner[3, 3];
         }
 
         public override int Size 
         { 
-            get { return currentSize * currentSize; } 
+            get { return CurrentSize * CurrentSize; } 
         }
 
         // Получаем список со всеми пустыми ячейками
@@ -30,11 +30,11 @@ namespace NoughtsAndCrosses.Classes
             {
                 List<CellInfo> EmptyCells = new List<CellInfo>();
 
-                for (int x = 0; x < currentSize; x++)
+                for (int x = 0; x < CurrentSize; x++)
                 {
-                    for (int y = 0; y < currentSize; y++)
+                    for (int y = 0; y < CurrentSize; y++)
                     {
-                        if (cells[x, y] == CellOwner.Empty)
+                        if (Cells[x, y] == CellOwner.Empty)
                         {
                             EmptyCells.Add(new CellInfo(x, y));
                         }
@@ -50,34 +50,34 @@ namespace NoughtsAndCrosses.Classes
         {
             get
             {
-                int count = 0;
+                int Count = 0;
 
                 // столбцы
-                for (int x = 0; x < currentSize; x++)
+                for (int x = 0; x < CurrentSize; x++)
                 {
-                    count = 0;
-                    for (int y = 0; y < currentSize; y++) count += (int)cells[x, y];
-                    if (count == 3) return CellOwner.X;
-                    if (count == -3) return CellOwner.O;
+                    Count = 0;
+                    for (int y = 0; y < CurrentSize; y++) Count += (int)Cells[x, y];
+                    if (Count == 3) return CellOwner.X;
+                    if (Count == -3) return CellOwner.O;
                 }
 
                 // строчки
                 for (int x = 0; x < 3; x++)
                 {
-                    count = 0;
-                    for (int y = 0; y < 3; y++) count += (int)cells[y, x];
-                    if (count == 3) return CellOwner.X;
-                    if (count == -3) return CellOwner.O;
+                    Count = 0;
+                    for (int y = 0; y < 3; y++) Count += (int)Cells[y, x];
+                    if (Count == 3) return CellOwner.X;
+                    if (Count == -3) return CellOwner.O;
                 }
 
                 // диагонали
-                count = (int)cells[0, 0] + (int)cells[1, 1] + (int)cells[2, 2];
-                if (count == 3) return CellOwner.X;
-                if (count == -3) return CellOwner.O;
+                Count = (int)Cells[0, 0] + (int)Cells[1, 1] + (int)Cells[2, 2];
+                if (Count == 3) return CellOwner.X;
+                if (Count == -3) return CellOwner.O;
 
-                count = (int)cells[0, 2] + (int)cells[1, 1] + (int)cells[2, 0];
-                if (count == 3) return CellOwner.X;
-                if (count == -3) return CellOwner.O;
+                Count = (int)Cells[0, 2] + (int)Cells[1, 1] + (int)Cells[2, 0];
+                if (Count == 3) return CellOwner.X;
+                if (Count == -3) return CellOwner.O;
 
                 return CellOwner.Empty;
             }
@@ -85,9 +85,9 @@ namespace NoughtsAndCrosses.Classes
 
         public override Blank Clone()
         {
-            Blank b = new Blank3x3();
-            b.cells = (CellOwner[,])this.cells.Clone();
-            return b;
+            Blank B = new Blank3x3();
+            B.Cells = (CellOwner[,])this.Cells.Clone();
+            return B;
         }
     }
 }

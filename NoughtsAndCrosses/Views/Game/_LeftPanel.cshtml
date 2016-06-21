@@ -6,12 +6,12 @@
     </div>
     <div class="col-sm-12 hidden-xs text-right">
         @Html.ActionLink("Вся статистика", "GetGamesList",  "Game", null, 
-            new {@class="buttons", data_toggle="modal", onclick="UploadStatisticPartialView(this, event, null)"})
+            new {@class="buttons", data_toggle="modal", onclick="uploadStatisticPartialView(this, event, null)"})
         <span class="glyphicon glyphicon-star-empty"></span>
     </div>
     <div class="col-sm-12 hidden-xs text-right">
         @Html.ActionLink("Текущие игры", "GetGamesList",  "Game", null, 
-            new {@class="buttons", data_toggle="modal", onclick="UploadStatisticPartialView(this, event, true)"})
+            new {@class="buttons", data_toggle="modal", onclick="uploadStatisticPartialView(this, event, true)"})
         <span class="glyphicon glyphicon-star-empty"></span>
     </div>
 </div>

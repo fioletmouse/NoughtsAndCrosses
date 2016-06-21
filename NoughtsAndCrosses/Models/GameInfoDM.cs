@@ -22,20 +22,4 @@ namespace NoughtsAndCrosses.Models
         // навигация на историю ходов
         public List<MovesInfo> Moves { get; set; }
     }
-
-    public class MovesInfo
-    {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        [Required]
-        public string MoveOwner { get; set; }
-        [Required]
-        public int RowX { get; set; }
-        [Required]
-        public int ColY { get; set; }
-
-        // Обратная ссылка
-        [Required]
-        public GameInfo GameInfo { get; set; }
-    }
 }
