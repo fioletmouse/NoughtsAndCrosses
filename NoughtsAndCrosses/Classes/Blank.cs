@@ -47,19 +47,19 @@ namespace NoughtsAndCrosses.Classes
     public abstract class Blank
     {
         // Массив со всеми ячейками. Храниться в них могут только значения из перечисления CellOwner
-        public CellOwner[,] cells;
+        public CellOwner[,] Cells;
 
         // Индексатор для ячейки. Получаем/устанавливаем владельца
         public  CellOwner this[int x, int y]
         {
             get
             {
-                return cells[x, y];
+                return Cells[x, y];
             }
 
             set
             {
-                cells[x, y] = value;
+                Cells[x, y] = value;
             }
         }
 
@@ -68,7 +68,7 @@ namespace NoughtsAndCrosses.Classes
         { 
             get 
             { 
-                return !cells.Cast<CellOwner>().Any(x => x == CellOwner.Empty); 
+                return !Cells.Cast<CellOwner>().Any(x => x == CellOwner.Empty); 
             } 
         }
 

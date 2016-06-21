@@ -4,7 +4,7 @@
     resize();
 
     appendTextToChart("Играем! ур...");
-    GetOverall();
+    getOverall();
 
     $("div.col-xs-4").click(function (e) {
         // Ставим картинку и вызываем ход компьютера
@@ -16,7 +16,6 @@
             appendTextToChart("Уже занято, Мяу!")
         }
     });
-
 });
 
 function resize()
@@ -30,9 +29,6 @@ function appendTextToChart(txt)
 }
 
 function makeComputerMove(divTag) {
-
-    //appendTextToChart("Move: x:" + $(divTag).attr("row") + " y:" + $(divTag).attr("col"));
-
     $.ajax({
         url: 'Game/Move',
         type: 'GET',
@@ -62,7 +58,7 @@ function makeComputerMove(divTag) {
 }
 
 // получение общего счета игр (левый блок)
-function GetOverall() {
+function getOverall() {
     $.ajax({
         url: 'Game/Overall',
         type: 'GET',
@@ -79,7 +75,7 @@ function GetOverall() {
 
 // Получение даннх статистики игр. 
 // forSession - флаг нужно ли фильтровать по текущей сессии
-function UploadStatisticPartialView(ctrl, e, forSession) {
+function uploadStatisticPartialView(ctrl, e, forSession) {
     e.preventDefault();
     $.ajax({
         url: ctrl.href,
@@ -98,7 +94,7 @@ function UploadStatisticPartialView(ctrl, e, forSession) {
 }
 
 // Получение данных по  ходам
-function GetMovesInfo(htmlTag) {
+function getMovesInfo(htmlTag) {
     $.ajax({
         url: 'Game/GetMovesByGameId',
         type: 'GET',

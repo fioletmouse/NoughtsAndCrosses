@@ -10,7 +10,6 @@ namespace NoughtsAndCrosses.Classes
     /// </summary>
     public static class Settings
     {
-
         private static Dictionary<GameResult, string> DefaultGameResult = new Dictionary<GameResult, string>
         {
             { GameResult.X, "Победa Котикa"},
@@ -20,14 +19,14 @@ namespace NoughtsAndCrosses.Classes
         private const string NotFinished = "Игра не закончена";
         
         // Получение результата игры, вынесено методом для обработки пустого значение
-        public static string GetOverAllDefinition(int? result)
+        public static string GetOverAllDefinition(int? Result)
         {
-            string ret = NotFinished;
-            if (result.HasValue)
+            string Ret = NotFinished;
+            if (Result.HasValue)
             {
-                ret = DefaultGameResult[(GameResult)result];
+                Ret = DefaultGameResult[(GameResult)Result];
             }
-            return ret;
+            return Ret;
         }
 
         public static Dictionary<GameResult, string> DefaultMessage = new Dictionary<GameResult, string>
