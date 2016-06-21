@@ -47,13 +47,27 @@ namespace NoughtsAndCrosses.Controllers
             return MoveResult(result);
         }
 
+        // Получение списка цитат для полного вывода
+        private IEnumerable<GameInfoView> GetItemsPerPage(int page, IEnumerable<GameInfoView> list)
+        {
+            int pageSize = 20;
+            var itemsToSkip = page * pageSize;
+
+            return list.Skip(itemsToSkip).Take(pageSize).ToList();
+        }
+
         // Методы для получения статистики
-        public ActionResult GetGamesList(string ForSession)
+        public ActionResult GetGamesList(int? id, string ForSession)
         {
             string UserSession = (ForSession == "true") ? Session.SessionID : null;
+            int page = id ?? 0;
 
-            var list = repo.GetGamesInfo(UserSession).ToList();
-            return PartialView("_GamesInfo", list);
+            // Получаем полный набор элементов
+            var FullList = repo.GetGamesInfo(UserSession);
+
+            var FilteredList = GetItemsPerPage(page, FullList);
+
+            return PartialView("_GamesInfo", FilteredList);
         }
 
         public ActionResult GetMovesByGameId(string GameId)

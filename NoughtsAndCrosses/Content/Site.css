@@ -24,3 +24,10 @@ h1, h3, h5 {
 .changedMargin {
     margin-bottom:8px;
 }
+.bottombar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color:gray;
+}

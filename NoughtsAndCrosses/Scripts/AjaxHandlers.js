@@ -2,6 +2,7 @@
 
     window.addEventListener("resize", resize);
     resize();
+
     appendTextToChart("Играем! ур...");
     GetOverall();
 
@@ -15,6 +16,7 @@
             appendTextToChart("Уже занято, Мяу!")
         }
     });
+
 });
 
 function resize()
