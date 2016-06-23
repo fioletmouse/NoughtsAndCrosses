@@ -48,26 +48,31 @@ namespace NoughtsAndCrosses.Controllers
         }
 
         // Получение ограниченного списка игр
-        private IEnumerable<GameInfoView> GetItemsPerPage(int Page, IEnumerable<GameInfoView> List)
+        private GamesInfoPage GetItemsPerPage(IEnumerable<GameInfoView> List, int? PageId)
         {
-            int PageSize = 20;
-            int itemsToSkip = Page * PageSize;
+            int Page = PageId ?? 1;
+            int PageSize = 10;      // По идее значени нужно вынести в настройки
+            int itemsToSkip = (Page-1) * PageSize;
 
-            return List.Skip(itemsToSkip).Take(PageSize).ToList();
+            GamesInfoPage GamePage = new GamesInfoPage();
+            GamePage.Pagination = new Pagination { PageNumber = Page, PageSize = PageSize, TotalItems = List.Count() };
+            GamePage.GamesList = List.Skip(itemsToSkip).Take(PageSize).ToList();
+
+            return GamePage;
         }
 
         // Методы для получения статистики
         public ActionResult GetGamesList(int? Id, string ForSession)
         {
             string UserSession = (ForSession == "true") ? Session.SessionID : null;
-            int Page = Id ?? 0;
 
             // Получаем полный набор элементов
             var FullList = Repo.GetGamesInfo(UserSession);
 
-            var FilteredList = GetItemsPerPage(Page, FullList);
+            // Получаем часть списка для вывода на страницу
+            var ListPart = GetItemsPerPage(FullList, Id);
 
-            return PartialView("_GamesInfo", FilteredList);
+            return PartialView("_GamesInfo", ListPart);
         }
 
         public ActionResult GetMovesByGameId(string GameId)

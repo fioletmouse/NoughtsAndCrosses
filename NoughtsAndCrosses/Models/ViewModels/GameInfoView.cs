@@ -12,7 +12,5 @@ namespace NoughtsAndCrosses.Models
         public string StartDate { get; set; }
         public string StartTime { get; set; }
         public int MoveCount { get; set; }
-
-        //public Pagination Pagination { get; set; }
     }
 }

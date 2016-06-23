@@ -31,3 +31,18 @@ h1, h3, h5 {
     right: 0;
     color:gray;
 }
+a.selected{
+    background-color:white;
+    color: red;
+    font-weight:bold;
+    border-color: #ccc;
+}
+
+a.btn-primary:hover,
+a.btn-primary:focus {
+    background-color: white;
+    color: red;
+    font-weight:300;
+    border-color: black;
+    font-weight:bold;
+}

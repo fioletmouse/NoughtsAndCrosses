@@ -141,10 +141,15 @@
     <Compile Include="Classes\Blank.cs" />
     <Compile Include="Classes\Blank3x3.cs" />
     <Compile Include="Classes\ChooseMoveLogic.cs" />
-    <Compile Include="Models\MoveResultVM.cs" />
-    <Compile Include="Models\MovesInfoDM.cs" />
-    <Compile Include="Models\MovesInfoVM.cs" />
-    <Compile Include="Models\OverallVM.cs" />
+    <Compile Include="Helpers\PaginationHelper.cs" />
+    <Compile Include="Models\DomainModels\GameInfo.cs" />
+    <Compile Include="Models\DomainModels\MovesInfo.cs" />
+    <Compile Include="Models\ViewModels\GameInfoView.cs" />
+    <Compile Include="Models\ViewModels\GamesInfoPage.cs" />
+    <Compile Include="Models\ViewModels\MoveResult.cs" />
+    <Compile Include="Models\ViewModels\MovesInfoView.cs" />
+    <Compile Include="Models\ViewModels\Overall.cs" />
+    <Compile Include="Models\ViewModels\Pagination.cs" />
     <Compile Include="Repository\IGameRepository.cs" />
     <Compile Include="Classes\MiddleLayer.cs" />
     <Compile Include="Classes\Settings.cs" />
@@ -152,9 +157,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\GameInfoDM.cs" />
     <Compile Include="Repository\GameRepository.cs" />
-    <Compile Include="Models\GameInfoVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\GameContext.cs" />
   </ItemGroup>
