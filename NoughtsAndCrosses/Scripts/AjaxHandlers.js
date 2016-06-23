@@ -73,22 +73,41 @@ function getOverall() {
     })
 }
 
-// Получение даннх статистики игр. 
+// Загрузка окна с данными по статистике
 // forSession - флаг нужно ли фильтровать по текущей сессии
-function uploadStatisticPartialView(ctrl, e, forSession) {
+function gamesListView(e, forSession) {
     e.preventDefault();
+
+    // Загрузка данных
+    gamesPageView(null, forSession);
+
+    $('#ReportModal input#IsSession').val(forSession);
+    $('#ReportModal').modal('show');
+}
+
+// Переход по страницам со статистикой
+function pageSwitch(pageId)
+{
+    var IsSession = $('#ReportModal input#IsSession').val();
+    gamesPageView(pageId, IsSession);
+}
+
+// Получение данных для страницы со статистикой для каждой страницы
+// forSession - флаг нужно ли фильтровать по текущей сессии
+function gamesPageView(pageId, forSession) {
     $.ajax({
-        url: ctrl.href,
+        url: 'Game/GetGamesList',
         type: 'GET',
-        data: { ForSession: forSession },
+        data: {
+            Id: pageId,
+            ForSession: forSession
+        },
 
         success: function (response, status, xhr) {
-            $('#ReportMovdal div.modal-body').html(response);
-            $('#ReportMovdal').modal('show');
+            $('#ReportModal div.modal-body').html(response);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            $('#ReportMovdal div.modal-body').html("<div>Котик устал, котик не хочет работать. <br />Лови ошибку: " + errorThrown + "</div>");
-            $('#ReportMovdal').modal('show');
+            $('#ReportModal div.modal-body').html("<div>Котик устал, котик не хочет работать. <br />Лови ошибку: " + errorThrown + "</div>");
         }
     })
 }
