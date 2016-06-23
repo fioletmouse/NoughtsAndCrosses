@@ -1,7 +1,7 @@
 # NoughtsAndCrosses (TicTacToe)
 Player_vs_Computer (minmax algorithm) 
 
-+ html
++ MVC 4
 + pure js
 + ajax/jquery
 + css
